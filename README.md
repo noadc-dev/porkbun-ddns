@@ -114,9 +114,9 @@ services:
     container_name: porkbun-ddns
     environment:
       DOMAIN: "domain.com" # Your Porkbun domain
-      SUBDOMAINS: "my_subdomain,my_other_subdomain,my_subsubdomain.my_subdomain" # Subdomains, separated by commas. Can be left empty.
-      SECRETAPIKEY: "<YOUR-SECRETAPIKEY>" # Pass your Porkbun Secret API Key in plaintext
-      APIKEY: "<YOUR-APIKEY>" # Pass your Porkbun API Key in plaintext
+      SUBDOMAINS: "my_subdomain,my_other_subdomain,my_subsubdomain.my_subdomain"
+      SECRETAPIKEY: "<YOUR-SECRETAPIKEY>"
+      APIKEY: "<YOUR-APIKEY>" 
       # PUBLIC_IPS: "1.2.3.4,2001:043e::1" # Set if you have static IPs
       # FRITZBOX: "192.168.178.1" # Use Fritz!BOX to obtain public IPs
       # SLEEP: "300" # Seconds to sleep between DynDNS runs
@@ -135,9 +135,9 @@ services:
     container_name: porkbun-ddns
     environment:
       DOMAIN: "domain.com" # Your Porkbun domain
-      SUBDOMAINS: "my_subdomain,my_other_subdomain,my_subsubdomain.my_subdomain"  # Subdomains, separated by commas. Can be left empty.
-      APIKEY_FILE: "/run/secrets/PORKBUN_API_KEY"  # Read API key from Docker secret
-      SECRETAPIKEY_FILE: "/run/secrets/PORKBUN_SECRET_API_KEY"  # Read secret API key from Docker secret
+      SUBDOMAINS: "my_subdomain,my_other_subdomain,my_subsubdomain.my_subdomain"
+      APIKEY_FILE: "/run/secrets/PORKBUN_API_KEY"
+      SECRETAPIKEY_FILE: "/run/secrets/PORKBUN_SECRET_API_KEY"
       # PUBLIC_IPS: "1.2.3.4,2001:043e::1" # Set if you have static IPs
       # FRITZBOX: "192.168.178.1" # Use Fritz!BOX to obtain public IPs
       # SLEEP: "300" # Seconds to sleep between DynDNS runs
@@ -150,10 +150,11 @@ services:
       - PORKBUN_SECRET_API_KEY
 
 secrets:
+  # Replace `/path/to/secrets/` with the actual directory where your secrets are stored. 
   PORKBUN_API_KEY:
-    file: /path/to/secrets/PORKBUN_API_KEY  # Replace `/path/to/secrets/` with the actual directory where your secrets are stored. 
+    file: /path/to/secrets/PORKBUN_API_KEY
   PORKBUN_SECRET_API_KEY:
-    file: /path/to/secrets/PORKBUN_SECRET_API_KEY  # Replace `/path/to/secrets/` with the actual directory where your secrets are stored. 
+    file: /path/to/secrets/PORKBUN_SECRET_API_KEY
 ```
 
 ---
@@ -181,7 +182,7 @@ docker run -d \
   -e SECRETAPIKEY_FILE="/run/secrets/PORKBUN_SECRET_API_KEY" \
   # Mount the secret files so they can be accessed by the container
   # Replace `/path/to/secrets/` with the actual directory where your secrets are stored. 
- --mount type=bind,source=/path/to/secrets/PORKBUN_API_KEY,target=/run/secrets/PORKBUN_API_KEY,readonly \
+  --mount type=bind,source=/path/to/secrets/PORKBUN_API_KEY,target=/run/secrets/PORKBUN_API_KEY,readonly \
   --mount type=bind,source=/path/to/secrets/PORKBUN_SECRET_API_KEY,target=/run/secrets/PORKBUN_SECRET_API_KEY,readonly \
   --name porkbun-ddns \
   --restart unless-stopped \
