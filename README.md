@@ -143,8 +143,8 @@ services:
       # SLEEP: "300" # Seconds to sleep between DynDNS runs
       # IPV4: "TRUE" # Enable IPv4
       # IPV6: "TRUE" # Enable IPv6
-      # DEBUG: "FALSE" # Enable debug logging
-	  restart: unless-stopped
+       # DEBUG: "FALSE" # Enable debug logging
+    restart: unless-stopped
     secrets:
       - PORKBUN_API_KEY
       - PORKBUN_SECRET_API_KEY
