@@ -114,9 +114,9 @@ services:
     container_name: porkbun-ddns
     environment:
       DOMAIN: "domain.com" # Your Porkbun domain
-      SUBDOMAINS: "my_subdomain,my_other_subdomain,my_subsubdomain.my_subdomain" # Comma-separated subdomains
-      SECRETAPIKEY: "<YOUR-SECRETAPIKEY>" # Pass your Porkbun Secret API Key in plaintext
-      APIKEY: "<YOUR-APIKEY>" # Pass your Porkbun API Key in plaintext
+      SUBDOMAINS: "my_subdomain,my_other_subdomain,my_subsubdomain.my_subdomain"
+      SECRETAPIKEY: "<YOUR-SECRETAPIKEY>"
+      APIKEY: "<YOUR-APIKEY>" 
       # PUBLIC_IPS: "1.2.3.4,2001:043e::1" # Set if you have static IPs
       # FRITZBOX: "192.168.178.1" # Use Fritz!BOX to obtain public IPs
       # SLEEP: "300" # Seconds to sleep between DynDNS runs
@@ -134,20 +134,27 @@ services:
     image: "mietzen/porkbun-ddns:latest"
     container_name: porkbun-ddns
     environment:
-      DOMAIN: "domain.com"
+      DOMAIN: "domain.com" # Your Porkbun domain
       SUBDOMAINS: "my_subdomain,my_other_subdomain,my_subsubdomain.my_subdomain"
-      APIKEY_FILE: "/run/secrets/PORKBUN_API_KEY"  # Read API key from Docker secret
-      SECRETAPIKEY_FILE: "/run/secrets/PORKBUN_SECRET_API_KEY"  # Read secret API key from Docker secret
+      APIKEY_FILE: "/run/secrets/PORKBUN_API_KEY"
+      SECRETAPIKEY_FILE: "/run/secrets/PORKBUN_SECRET_API_KEY"
+      # PUBLIC_IPS: "1.2.3.4,2001:043e::1" # Set if you have static IPs
+      # FRITZBOX: "192.168.178.1" # Use Fritz!BOX to obtain public IPs
+      # SLEEP: "300" # Seconds to sleep between DynDNS runs
+      # IPV4: "TRUE" # Enable IPv4
+      # IPV6: "TRUE" # Enable IPv6
+       # DEBUG: "FALSE" # Enable debug logging
     restart: unless-stopped
     secrets:
       - PORKBUN_API_KEY
       - PORKBUN_SECRET_API_KEY
 
 secrets:
+  # Replace `/path/to/secrets/` with the actual directory where your secrets are stored. 
   PORKBUN_API_KEY:
-    file: /path/to/secrets/PORKBUN_API_KEY  # Replace with actual directory
+    file: /path/to/secrets/PORKBUN_API_KEY
   PORKBUN_SECRET_API_KEY:
-    file: /path/to/secrets/PORKBUN_SECRET_API_KEY  # Replace with actual directory
+    file: /path/to/secrets/PORKBUN_SECRET_API_KEY
 ```
 
 ---
@@ -173,22 +180,11 @@ docker run -d \
   -e SUBDOMAINS="my_subdomain,my_other_subdomain" \
   -e APIKEY_FILE="/run/secrets/PORKBUN_API_KEY" \
   -e SECRETAPIKEY_FILE="/run/secrets/PORKBUN_SECRET_API_KEY" \
+  # Mount the secret files so they can be accessed by the container
+  # Replace `/path/to/secrets/` with the actual directory where your secrets are stored. 
   --mount type=bind,source=/path/to/secrets/PORKBUN_API_KEY,target=/run/secrets/PORKBUN_API_KEY,readonly \
   --mount type=bind,source=/path/to/secrets/PORKBUN_SECRET_API_KEY,target=/run/secrets/PORKBUN_SECRET_API_KEY,readonly \
   --name porkbun-ddns \
   --restart unless-stopped \
   noadc-dev/porkbun-ddns:latest
 ```
-
----
-
-### Key Improvements:
-
-1. **Grammar and Clarity:** Improved sentence structure for better readability.
-2. **Consistency:**
-   - Standardized punctuation and formatting.
-   - Ensured all references to variables, commands, and services were uniform.
-3. **Code Formatting:** Ensured proper indentation in YAML files for readability.
-4. **Spelling Fixes:** Fixed minor typos and inconsistencies.
-
-Your README is now clearer, more professional, and easier to follow. 🚀 Let me know if you need any additional tweaks!
