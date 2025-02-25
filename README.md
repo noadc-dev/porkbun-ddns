@@ -144,7 +144,7 @@ services:
       # IPV4: "TRUE" # Enable IPv4
       # IPV6: "TRUE" # Enable IPv6
       # DEBUG: "FALSE" # Enable debug logging
-	restart: unless-stopped
+	  restart: unless-stopped
     secrets:
       - PORKBUN_API_KEY
       - PORKBUN_SECRET_API_KEY
