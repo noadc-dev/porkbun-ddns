@@ -1,0 +1,54 @@
+name: Feedback Label Automation
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+
+jobs:
+  manage-feedback-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Determine commenter role
+        id: determine-role
+        run: |
+          AUTHOR="${{ github.event.comment.author_association }}"
+          if [[ "$AUTHOR" == "OWNER" || "$AUTHOR" == "MEMBER" || "$AUTHOR" == "COLLABORATOR" ]]; then
+            echo "IS_MAINTAINER=true" >> $GITHUB_ENV
+          else
+            echo "IS_MAINTAINER=false" >> $GITHUB_ENV
+          fi
+
+          ISSUE_STATE="${{ github.event.issue.state }}"
+          HAS_ENHANCEMENT_LABEL=false
+          for label in "${{ toJson(github.event.issue.labels) }}" ; do
+            if [[ "$label" == *"enhancement"* ]]; then
+              HAS_ENHANCEMENT_LABEL=true
+              break
+            fi
+          done
+
+          if [[ "$ISSUE_STATE" == "open" && "$HAS_ENHANCEMENT_LABEL" == "false" ]]; then
+            echo "IS_ELIGIBLE=true" >> $GITHUB_ENV
+          else
+            echo "IS_ELIGIBLE=false" >> $GITHUB_ENV
+          fi
+
+      - name: Add 'feedback required' label
+        if: env.IS_MAINTAINER == 'true' && env.IS_ELIGIBLE == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue edit ${{ github.event.issue.number }} --add-label "Feedback needed"
+
+      - name: Remove 'feedback required' label
+        if: env.IS_MAINTAINER == 'false' && env.IS_ELIGIBLE == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue edit ${{ github.event.issue.number }} --remove-label "Feedback needed"
